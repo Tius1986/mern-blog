@@ -73,6 +73,7 @@ export const signin = async (req, res, next) => {
         // Ritorna validUser senza password
         const { password: pass, ...rest } = validUser._doc
 
+        // Invia Cookie al Client
         res.status(200).cookie('access_token', token, {
             httpOnly: true}).json(rest)
 
