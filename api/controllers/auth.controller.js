@@ -1,7 +1,8 @@
 import User from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
+import { errorHandler } from '../utils/error.js';
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
     
     // Destructuring
     // username, email e password sono ottenuti
@@ -15,11 +16,8 @@ export const signup = async (req, res) => {
      * non sono true o siano una stringa vuota.
      * Come compilare campi nel form.
      * */
-    if(!username || !email || 
-        !password || username === '' || 
-        email === '' || password === ''
-    ) {
-        return res.status(400).json({ messagge: 'Tutti i sono campi sono obbligatori' })
+    if(!email || !password || email === '' || password === '') {
+        next(errorHandler(400, 'Tutti i campi sono obbligatori'))
     }
 
     // Crypta la password.
@@ -34,10 +32,9 @@ export const signup = async (req, res) => {
     try {
         // Salva nuovo utente
         await newUser.save()
+        res.json('Signup successful')
         
     } catch(err) {
-        res.status(500).json({ message: err.message })
+        next(err)
     }
-
-    res.json('Signup successful')
 }
