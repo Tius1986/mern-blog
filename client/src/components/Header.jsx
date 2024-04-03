@@ -9,8 +9,8 @@ export default function Header() {
 
   const path = useLocation().pathname;
   const dispatch = useDispatch()
-  const { currentUser } = useSelector(state => state.user)
-  const { theme } = useSelector(state => state.theme)
+  const { currentUser } = useSelector((state) => state.user)
+  const { theme } = useSelector((state) => state.theme)
 
   return (
     <Navbar className="border-b-2">

@@ -75,7 +75,7 @@ export const signin = async (req, res, next) => {
 
         // Invia Cookie al Client
         res.status(200).cookie('access_token', token, {
-            httpOnly: true}).json(rest)
+            httpOnly: true }).json(rest)
 
     } catch(error) {
         next(error)

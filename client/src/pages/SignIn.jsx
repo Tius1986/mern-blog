@@ -10,9 +10,9 @@ export default function SignIn() {
   const [formData, setFormData] = useState({})
   // const [errorMessage, setErrorMessage] = useState(null)
   // const [loading, setLoading] = useState(false)
-  const { loading, error: errorMessage } = useSelector(state => state.user)
-  const dispatch = useDispatch()
+  const { loading, error: errorMessage } = useSelector((state) => state.user)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value.trim() })
@@ -89,6 +89,7 @@ export default function SignIn() {
               <TextInput type='password' placeholder='Password' id='password' onChange={handleChange}/>
             </div>
             <Button gradientDuoTone="purpleToPink" type="submit" disabled={loading}>
+            
               {
                 loading ? (
                   <>

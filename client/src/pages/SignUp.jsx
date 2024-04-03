@@ -1,6 +1,6 @@
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import  OAuth from '../components/OAuth'
 
 export default function SignUp() {
@@ -11,7 +11,7 @@ export default function SignUp() {
   const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.id]: e.target.value.trim() })
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() })
   }
 
   const handleSubmit = async (e) => {
@@ -23,12 +23,13 @@ export default function SignUp() {
     }
 
     try {
+
       setLoading(true)
       setErrorMessage(null)
 
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
 
@@ -88,15 +89,19 @@ export default function SignUp() {
               <Label value="Your Password"/>
               <TextInput type='password' placeholder='Password' id='password' onChange={handleChange}/>
             </div>
-            <Button gradientDuoTone="purpleToPink" type="submit" disabled={loading}>
-              {
-                loading ? (
-                  <>
-                    <Spinner size='sm'/>
-                    <span className="pl-3">Loading...</span>
-                  </>                  
-                ) : 'Sign Up'
-              }
+            <Button
+              gradientDuoTone='purpleToPink'
+              type='submit'
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Spinner size='sm' />
+                  <span className='pl-3'>Loading...</span>
+                </>
+              ) : (
+                'Sign Up'
+              )}
             </Button>
             <OAuth />
           </form>
