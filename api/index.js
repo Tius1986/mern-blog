@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import userRoutes from './routes/user.route.js'
 import authRoutes from './routes/auth.route.js'
 import cookieParser from 'cookie-parser'
+import postRoute from './routes/post.route.js'
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api/post', postRoute)
 
 app.listen(3000, () => {
     console.log(`Server is running on port 3000`)
