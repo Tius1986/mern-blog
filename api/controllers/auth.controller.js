@@ -1,7 +1,7 @@
-import User from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js'
 // import { restart } from 'nodemon';
 
 export const signup = async (req, res, next) => {
@@ -18,14 +18,16 @@ export const signup = async (req, res, next) => {
      * non sono true o siano una stringa vuota.
      * Come compilare campi nel form.
      * */
-    if(!username ||
+    if (
+        !username ||
         !email ||
         !password ||
         username === '' ||
         email === '' ||
-        password === '') {
-        next(errorHandler(400, 'Tutti i campi sono obbligatori'))
-    }
+        password === ''
+      ) {
+        next(errorHandler(400, 'All fields are required'));
+      }
 
     // Crypta la password.
     const hashedPassword = bcryptjs.hashSync(password, 10)
