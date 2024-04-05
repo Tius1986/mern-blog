@@ -107,7 +107,8 @@ export const updatePost = async (req, res, next) => {
                     category: req.body.category,
                     image: req.body.image
 
-                }},{ new: true })
+                },
+            },{ new: true })
 
         res.status(200).json(updatedPost)
 

@@ -12,17 +12,15 @@ import { useSelector } from 'react-redux'
 
 export default function UpdatePost() {
   
-  const { currentUser } = useSelector(state => state.user)
   const [file, setFile] = useState(null)
   const [imageUploadProgress, setImageUploadProgress] = useState(null)
   const [imageUploadError, setImageUploadError] = useState(null)
   const [formData, setFormData] = useState({})
   const [publishError, setPublishError] = useState(null)
   const { postId } = useParams()
-
-
-  // console.log(formData)
+  
   const navigate = useNavigate()
+  const { currentUser } = useSelector((state) => state.user)
 
   useEffect(() => {
     try {
@@ -91,6 +89,7 @@ export default function UpdatePost() {
   const handleSubmit = async(e) => {
     e.preventDefault()
     try {
+      console.log(`/api/post/updatepost/${formData.id}/${currentUser._id}`)
 
       const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
         method: 'PUT',
@@ -154,8 +153,8 @@ export default function UpdatePost() {
         { formData.image && (
           <img src={formData.image} alt='upload' className='w-full h-72 object-cover' />
         )}
-        <ReactQuill theme='snow' placeholder='Write something..' className='h-72 mb-12' required 
-        onChange={(value) => setFormData({ ...formData , content: value })} value={formData.content}/>
+        <ReactQuill value={formData.content} theme='snow' placeholder='Write something..' className='h-72 mb-12' required 
+        onChange={(value) => setFormData({ ...formData , content: value })}/>
 
         <Button type='submit' gradientDuoTone='purpleToBlue'>
           Update post
