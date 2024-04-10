@@ -1,18 +1,18 @@
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Alert, Textarea, Button } from 'flowbite-react'
 import { useState, useEffect } from 'react'
 import Comment from '../components/Comment'
+import PropTypes from 'prop-types'
 
 
-export default function CommentSection({ postId }) {
+export default function CommentSection({postId}) {
 
     const { currentUser } = useSelector((state) => state.user)
     const [comment, setComment] = useState('')
     const [commentError, setCommentError] = useState(null)
     const [comments, setComments] = useState([])
-
-    console.log(comments)
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -26,7 +26,6 @@ export default function CommentSection({ postId }) {
                 body: JSON.stringify({ content: comment, postId, userId: currentUser._id })
             })
             const data = res.json()
-
             if (res.ok) {
                 setComment('')
                 setCommentError(null)
@@ -35,14 +34,12 @@ export default function CommentSection({ postId }) {
         } catch (error) {
             setCommentError(error.message)
         }
-
     }
 
     useEffect(() => {
         const getComments = async () => {
             try {
                 const res = await fetch(`/api/comment/getPostComments/${postId}`)
-
                 if (res.ok) {
                     const data = await res.json()
                     setComments(data)
@@ -52,13 +49,35 @@ export default function CommentSection({ postId }) {
             }
         }
         getComments()
+    },[postId])
 
-    }, [postId])
-
+    const handleLike = async(commentId) => {
+        try {
+            if(!currentUser) {
+                navigate('/sign-in')
+                return
+            }
+            const res = fetch(`/api/comment/likeComment/${commentId}`, {
+                method: 'PUT'
+            })
+            if(res.ok) {
+                const data = await res.json()
+                setComments(comments.map((comment) => {
+                    comment._id === commentId ? { 
+                        ...comment, 
+                        likes: data.likes, 
+                        numberOfLikes: data.likes.length 
+                    } : comment
+                }))
+            }
+        } catch(error) {
+            console.log(error.message)
+        }
+    }
 
     return (
         <div className='max-w-2xl mx-auto w-full p-3'>
-            {currentUser ? (
+            { currentUser ? (
                 <div className='flex items-center gap-1 my-5 text-gray-500 text-sm'>
                     <p>Signed in as </p>
                     <img className='h-7 w-7 object-cover rounded-full' src={currentUser.profilePicture} alt='profile picture' />
@@ -74,7 +93,7 @@ export default function CommentSection({ postId }) {
                     </Link>
                 </div>
             )}
-            {currentUser && (
+            { currentUser && (
                 <form className='border border-gray-300 rounded-md p-3' onSubmit={handleSubmit}>
                     <Textarea onChange={(e) => setComment(e.target.value)} value={comment} placeholder='Add a comment...' rows='3' maxLength='200' />
                     <div className='flex justify-between items-center mt-5'>
@@ -83,14 +102,14 @@ export default function CommentSection({ postId }) {
                             Submit
                         </Button>
                     </div>
-                    {commentError && (
+                    { commentError && (
                         <Alert color='failure' className='mt-5'>
-                            {commentError}
+                            { commentError }
                         </Alert>
                     )}
                 </form>
             )}
-            {comments.length === 0 ? (
+            { comments.length === 0 ? (
                 <p className='text-sm my-5'>No comments yet</p>
             ) : (
                 <>
@@ -101,10 +120,14 @@ export default function CommentSection({ postId }) {
                         </div>
                     </div>
                     {comments.map(comment => (
-                        <Comment key={comment._id} comment={comment}/>
+                        <Comment key={comment._id} comment={comment} onLike={handleLike} />
                     ))}
                 </>
             )}
         </div>
     )
+}
+
+CommentSection.PropTypes = {
+    postId: PropTypes.string.isRequired
 }

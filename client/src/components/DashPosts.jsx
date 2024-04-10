@@ -73,7 +73,7 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.isAdmin && userPosts.length > 0 ? (
+      { currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -133,7 +133,7 @@ export default function DashPosts() {
               </Table.Body>
             ))}
           </Table>
-          {showMore && (
+          { showMore && (
             <button
               onClick={handleShowMore}
               className='w-full text-teal-500 self-center text-sm py-7'
@@ -159,7 +159,7 @@ export default function DashPosts() {
               Are you sure you want to delete this post?
             </h3>
             <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={handleDeletePost}>
+              <Button color='failure' onClick={ handleDeletePost }>
                 Yes, I'm sure
               </Button>
               <Button color='gray' onClick={() => setShowModal(false)}>

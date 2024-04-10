@@ -34,7 +34,6 @@ export default function PostPage() {
             }
         }
         fetchPosts()
-
     },[postSlug])
 
     if(loading) return (
